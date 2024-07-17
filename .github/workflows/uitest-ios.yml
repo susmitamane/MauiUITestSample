@@ -43,20 +43,11 @@ jobs:
       with:
         dotnet-version: ${{ env.DOTNET_VERSION }}
         
-    - name: Install .NET MAUI Workload
-      run: dotnet workload install maui
-
     - name: Restore dependencies
       run: dotnet restore
-      
-    - name: Publish .NET MAUI iOS App
-      run: dotnet publish ${{ env.MAUI_CSPROJ_TO_BUILD }} -c ${{ env.BUILD_CONFIGURATION }} -f ${{ env.TFM_PREFIX }}-ios -o ${{ github.workspace }}/artifacts/
-      
-    - name: Build UITest Project
-      run: dotnet build ${{ env.UITEST_CSPROJ_TO_BUILD }} -c ${{ env.BUILD_CONFIGURATION }}
-      
-    - name: Install App Center CLI
-      run: npm install --location=global appcenter-cli
-      
-    - name: Upload App to Test Cloud
-      run: appcenter test run uitest --app "${{ env.APP_DEFINITION }}" --devices "${{ env.TEST_DEVICES }}" --app-path "${{ github.workspace }}/artifacts/MauiUITestSample.ipa" --test-series "${{ env.TEST_SERIES }}" --build-dir "MyAppTests/bin/${{ env.BUILD_CONFIGURATION }}/net48/" --uitest-tools-dir "MyAppTests/bin/${{ env.BUILD_CONFIGURATION }}/net48/" --token "${{ secrets.APPCENTER_TOKEN_IOS }}" --async
+
+    - name: Build
+      run: dotnet build --configuration Release --no-restore
+
+    - name: Test
+      run: dotnet test --configuration Release --no-build --verbosity normal
