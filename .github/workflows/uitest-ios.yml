@@ -45,12 +45,6 @@ jobs:
         
     - name: Install .NET MAUI Workload
       run: dotnet workload install maui
-    
-    - name: Install iOS App P12 Certificate
-      uses: Apple-Actions/import-codesign-certs@v1
-      with:
-        p12-file-base64: ${{ secrets.P12_FILE_BASE64 }}
-        p12-password: ${{ secrets.P12_PASSWORD }}
         
     - name: Install iOS App Provisioning Profile
       uses: Apple-Actions/download-provisioning-profiles@v1
